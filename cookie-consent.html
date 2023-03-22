@@ -12,7 +12,7 @@
                 date.setTime(date.getTime() + (days*24*60*60*1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            document.cookie = name + "=" + value + expires + "; path=/";
+            document.cookie = name + "=" + value + expires + "; path=/" + ";secure;SameSite=None";
         }
         function readCookie(name) {
             var nameEQ = name + "=";
@@ -24,10 +24,25 @@
             }
             return null;
         }
-        function eraseCookie(name) {
-            createCookie(name,"",-1);
+        
+        function deleteCookiesByPattern(pattern) {
+            const cookies = document.cookie.split(';');
+
+            console.log(cookies.length); 
+
+            for (let i = 0; i < cookies.length; i++) {
+
+                const cookie = cookies[i];
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+
+                if (name.includes(pattern)) {
+                    console.log(document.cookie);
+                    document.cookie = name + "=; Domain=.littlebigtech.net; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=None";
+                }
+            }
         }
-    
+        
         if(readCookie('cookie-notice-option')=='true') {
             {{ if hugo.IsProduction | or (eq .Site.Params.env "production") }}
             
@@ -48,13 +63,18 @@
                 window.dataLayer = window.dataLayer || [];
                 function gtag() { dataLayer.push(arguments); }
                 gtag('js', new Date());
-                gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true }); //REPLACE WITH YOUR GA TAG!
+                //REPLACE WITH YOUR GA TAG!
+                gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true, cookie_flags: 'secure;samesite=none' });
             })
     
             {{ end }}
-        } else if (readCookie('cookie-notice-option')!='false'){
-            document.getElementById('cookie-notice').style.display = 'block';
-        }
+            } else if (readCookie('cookie-notice-option')!='false'){
+                deleteCookiesByPattern("_ga");
+                document.getElementById('cookie-notice').style.display = 'block';
+            } else if (readCookie('cookie-notice-option')=='false'){
+                deleteCookiesByPattern("_ga");
+                document.getElementById('cookie-notice').style.display = 'none';
+            }
     
         document.getElementById('cookie-notice-accept').addEventListener("click",function() {
             createCookie('cookie-notice-option','true',31);
