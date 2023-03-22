@@ -38,7 +38,8 @@
 
                 if (name.includes(pattern)) {
                     console.log(document.cookie);
-                    document.cookie = name + "=; Domain=.littlebigtech.net; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=None";
+                    // ADD YOUR DOMAIN HERE! KEEP THE DOT INFRONT, OTHERWISE THE COOKIE WONT GET DELETED
+                    document.cookie = name + "=; Domain=.yourdomain.com; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=None";
                 }
             }
         }
@@ -68,13 +69,13 @@
             })
     
             {{ end }}
-            } else if (readCookie('cookie-notice-option')!='false'){
-                deleteCookiesByPattern("_ga");
-                document.getElementById('cookie-notice').style.display = 'block';
-            } else if (readCookie('cookie-notice-option')=='false'){
-                deleteCookiesByPattern("_ga");
-                document.getElementById('cookie-notice').style.display = 'none';
-            }
+        } else if (readCookie('cookie-notice-option')!='false'){
+            deleteCookiesByPattern("_ga");
+            document.getElementById('cookie-notice').style.display = 'block';
+        } else if (readCookie('cookie-notice-option')=='false'){
+            deleteCookiesByPattern("_ga");
+            document.getElementById('cookie-notice').style.display = 'none';
+        }
     
         document.getElementById('cookie-notice-accept').addEventListener("click",function() {
             createCookie('cookie-notice-option','true',31);
