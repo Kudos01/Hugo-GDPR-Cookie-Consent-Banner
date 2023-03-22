@@ -28,8 +28,6 @@
         function deleteCookiesByPattern(pattern) {
             const cookies = document.cookie.split(';');
 
-            console.log(cookies.length); 
-
             for (let i = 0; i < cookies.length; i++) {
 
                 const cookie = cookies[i];
@@ -37,7 +35,6 @@
                 const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 
                 if (name.includes(pattern)) {
-                    console.log(document.cookie);
                     // ADD YOUR DOMAIN HERE! KEEP THE DOT INFRONT, OTHERWISE THE COOKIE WONT GET DELETED
                     document.cookie = name + "=; Domain=.yourdomain.com; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; SameSite=None";
                 }
